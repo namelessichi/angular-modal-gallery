@@ -24,16 +24,29 @@
  */
 
 .ng-gallery {
-  width: 100%;
-  display: inline-block;
+  //width: 100%;
+  //display: inline-block;
+}
+
+.ng-thumb-container {
+  margin-bottom: 50px;
+  text-align: center;
+
+  .ng-thumb-description {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
 }
 
 img {
   &.ng-thumb {
-    height: 50px;
-    float: left;
-    display: block;
+    max-width: 100%;
+    height: auto;
+    //height: 50px;
+    //float: left;
+    //display: block;
     cursor: pointer;
-    margin: 2px 2px 0 0;
+    //margin: 2px 2px 0 0;
   }
 }
