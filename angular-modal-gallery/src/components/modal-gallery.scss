@@ -100,7 +100,10 @@
   > span {
 
     &.info-text {
-      color: #fff;
+      //color: #fff;
+      color: black;
+      font-family: circularile !important;
+
       display: inline-block;
       width: 100%;
       height: 20px;

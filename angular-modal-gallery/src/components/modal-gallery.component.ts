@@ -25,7 +25,7 @@
 
 import {
     OnInit, Input, Output, EventEmitter, HostListener, Component, OnDestroy, OnChanges, SimpleChanges,
-    ViewChild, ViewContainerRef, TemplateRef
+    ViewChild, ViewContainerRef, TemplateRef, ApplicationRef
 } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
@@ -138,6 +138,7 @@ export class AngularModalGalleryComponent implements OnInit, OnDestroy, OnChange
 
     @ViewChild('amgOverlay', {read: ViewContainerRef}) _overlay: ViewContainerRef;
     @ViewChild('amgOverlayTpl') _overlayTpl: TemplateRef<any>;
+    @Input() parentContainer: ViewContainerRef;
 
     /**
      * Array or Observable input that represents a list of Images used to show both
@@ -289,7 +290,8 @@ export class AngularModalGalleryComponent implements OnInit, OnDestroy, OnChange
      * Constructor with the injection of ´KeyboardService´ that initialize some description fields
      * based on default values.
      */
-    constructor(private keyboardService: KeyboardService) {
+    constructor(private keyboardService: KeyboardService,
+                private appRef: ApplicationRef) {
         // if description isn't provided initialize it with a default object
         if (!this.description) {
             this.description = {
@@ -318,12 +320,22 @@ export class AngularModalGalleryComponent implements OnInit, OnDestroy, OnChange
             close: (this.buttonsConfig && this.buttonsConfig.close)
         };
 
-        // call initImages passing true as parameter, because I want to emit `hasData` event
-        this.initImages(true);
+        setTimeout(() => {
+            let overlay = this._overlayTpl.createEmbeddedView(null);
+            this.parentContainer.insert(overlay);
+            this.initImages(true);
+        });
 
-        let overlay = this._overlayTpl.createEmbeddedView(null);
+        //this.appRef.attachView(overlay);
+        //let overlayDom = overlay.rootNodes[0] as HTMLElement;
+
         //this._overlay.insert(overlay);
+        //document.body.appendChild(overlayDom);
+
+
+        // call initImages passing true as parameter, because I want to emit `hasData` event
     }
+
 
     /**
      * Method ´ngOnChanges´ to init images preventing errors.
@@ -349,6 +361,9 @@ export class AngularModalGalleryComponent implements OnInit, OnDestroy, OnChange
      * @returns String description to display.
      */
     getDescriptionToDisplay() {
+        return this.currentImage.description;
+
+/*
         if (this.description && this.description.customFullDescription) {
             return this.description.customFullDescription;
         }
@@ -358,6 +373,7 @@ export class AngularModalGalleryComponent implements OnInit, OnDestroy, OnChange
             return `${this.description.imageText}${this.currentImageIndex + 1}${this.description.numberSeparator}${this.images.length}`;
         }
         return `${this.description.imageText}${this.currentImageIndex + 1}${this.description.numberSeparator}${this.images.length}${this.description.beforeTextDescription}${this.currentImage.description}`;
+*/
     }
 
     /**
